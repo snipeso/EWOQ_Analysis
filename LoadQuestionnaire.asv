@@ -1,4 +1,4 @@
-function [allAnswers, JSON] = LoadQuestionnaire(filepath)
+function [allAnswers, eligible, JSON] = LoadQuestionnaire(filename, filepath)
 %%% gets questionnaire answers.
 %%% filename should be like "filename.json"
 %%% filepath should be like "C:\AllData\Questionnaires\Participant0\"
@@ -7,7 +7,7 @@ function [allAnswers, JSON] = LoadQuestionnaire(filepath)
 %%% savetable is a boolean that can save the output to a .csv
 
 % read JSON
-JSON = jsondecode(fileread(filepath));
+JSON = jsondecode(fileread([filepath, filename]));
 if isfield(JSON, 'answers')
     Answers = JSON.answers;
 
