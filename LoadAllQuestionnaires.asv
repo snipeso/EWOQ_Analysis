@@ -44,6 +44,7 @@ for Indx_D = 1:size(Datasets, 1) % loop through participants
         % estimate folder destination for each dataset based on template
         Path = fullfile(DatasetPath, Folders{Indx_F});
         Levels = split(Folders{Indx_F}, '\');
+        Levels(cellfun('isempty',Levels)) = []; % remove blanks
         
         % skip rest if folder not found
         if ~exist(Path, 'dir')
@@ -81,20 +82,30 @@ for Indx_D = 1:size(Datasets, 1) % loop through participants
             % load all questions to questionnaire structure
             for Indx_A = 1:size(allAnswers, 2)
                 
-                if isfield(AllQuestionnaires, 'QName')
+                if isfield(AllQuestionnaires, QName)
                     % add questions to struct
-                    Q_Indx = size(AllQuestionnaires.(QName).questions) + 1;
+                    Q_Indx = size(AllQuestionnaires.(QName).questions, 2) + 1;
                 else
                     % start a new struct
                     Q_Indx = 1;
                 end
                 
                 % save all folders to question entry
+                AllQuestionnaires.(QName).questions(Q_Indx).dataset = Dataset;
                 AllQuestionnaires.(QName).questions(Q_Indx).filename = Content(Indx_C).name; % saves folder that defines the questionnaire
                 for Indx_L = 1:numel(Levels)
                     AllQuestionnaires.(QName).questions(Q_Indx).(['Level', num2str(Indx_L)]) = Levels{Indx_L};
                 end
                 
+                % save question properties
+                AllQuestionnaires.(QName).questions(Q_Indx).qID = allAnswers(Indx_A).qID;
+                AllQuestionnaires.(QName).questions(Q_Indx).Question = allAnswers(Indx_A).Question;
+                AllQuestionnaires.(QName).questions(Q_Indx).qType = allAnswers(Indx_A).Type;
+                AllQuestionnaires.(QName).questions(Q_Indx).qLabels = allAnswers(Indx_A).Labels;
+                
+                % save answers
+                AllQuestionnaires.(QName).questions(Q_Indx).strAnswer = allAnswers(Indx_A).strAnswer;
+                AllQuestionnaires.(QName).questions(Q_Indx).numAnswer = allAnswers(Indx_A).numAnswer;
             end
             
             
@@ -107,26 +118,20 @@ for Indx_D = 1:size(Datasets, 1) % loop through participants
             
         end
         
-        
-        % loop through questionnaire answers
-        % save participant info, questionnaire folder name into overall
-        % struct, and current questionnaire struct
-        
-        % save all levels
-        
-        for Indx_L = 1:numel(Levels)
-            AllQuestionnaires(Folder_Indx).(['Level', num2str(Indx_L)]) = Levels{Indx_L};
-        end
-        
-        
-        
-        AllQuestionnaires(Folder_Indx).(Dataset) =size(TotFiles, 1);
-        Folder_Indx = Folder_Indx + 1;
     end
     
 end
 
-%TODO loop through each questionnaire, and save as seperate csv
-T = struct2table(AllQuestionnaires);
-writetable(T, [DataPath, 'AllFiles.csv'])
+Questionnaires = fieldnames(AllQuestionnaires);
+
+CSVFolder =DataPath, 'CSVs';
+if ~exist(CSVFolder)
+
+for Indx_Q = 1:numel(Questionnaires)
+    Q = AllQuestionnaires.(Questionnaires{Indx_Q}).questions;
+    T = struct2table(Q);
+    writetable(T,  fullfile(CSVpath, [Questionnaires{Indx_Q} '_All.csv']))
+end
+
+
 

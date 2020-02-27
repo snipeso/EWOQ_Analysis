@@ -1,5 +1,13 @@
 function T = LoadAllQuestionnaires(DataPath, TemplateFolder, SaveCSV)
 
+
+% make path for CSV destinations
+CSVFolder = fullfile(DataPath, 'CSVs');
+if ~exist(CSVFolder, 'dir')
+    mkdir(CSVFolder)
+end
+
+
 % fix stupid backslash problem
 TemplateFolderPath = fullfile(DataPath, TemplateFolder);
 
@@ -32,8 +40,6 @@ Datasets(contains(string(Datasets), TemplateFolder), :) = []; % ignores template
 AllQuestionnaires = struct();
 
 for Indx_D = 1:size(Datasets, 1) % loop through participants
-    Folder_Indx = 1; % new entry for every terminal folder
-    
     
     Dataset = deblank(Datasets(Indx_D, :));
     DatasetPath = fullfile(DataPath, Dataset);
@@ -44,6 +50,8 @@ for Indx_D = 1:size(Datasets, 1) % loop through participants
         % estimate folder destination for each dataset based on template
         Path = fullfile(DatasetPath, Folders{Indx_F});
         Levels = split(Folders{Indx_F}, '\');
+        Levels(cellfun('isempty',Levels)) = []; % remove blanks
+        Levels(strcmpi(Levels, 'questionnaire') | strcmpi(Levels, 'questionnaires')) = []; % remove uninformative level that its a questionnaire
         
         % skip rest if folder not found
         if ~exist(Path, 'dir')
@@ -70,26 +78,24 @@ for Indx_D = 1:size(Datasets, 1) % loop through participants
             % Use last folder as questionnaire identifier, unless folder is
             % named "questionnaire", then use the one before that
             QName = Levels{end};
-            if strcmpi(QName, 'questionnaire')
-                QName = Levels{end-1};
-            end
             
             % download questionnaire
-            [allAnswers, JSON] = LoadQuestionnaire(fullfile(Subpath, 'private.json'));
+            allAnswers = LoadQuestionnaire(fullfile(Subpath, 'private.json'));
             
             
             % load all questions to questionnaire structure
             for Indx_A = 1:size(allAnswers, 2)
                 
-                if isfield(AllQuestionnaires, 'QName')
+                if isfield(AllQuestionnaires, QName)
                     % add questions to struct
-                    Q_Indx = size(AllQuestionnaires.(QName).questions) + 1;
+                    Q_Indx = size(AllQuestionnaires.(QName).questions, 2) + 1;
                 else
                     % start a new struct
                     Q_Indx = 1;
                 end
                 
                 % save all folders to question entry
+                AllQuestionnaires.(QName).questions(Q_Indx).dataset = Dataset;
                 AllQuestionnaires.(QName).questions(Q_Indx).filename = Content(Indx_C).name; % saves folder that defines the questionnaire
                 for Indx_L = 1:numel(Levels)
                     AllQuestionnaires.(QName).questions(Q_Indx).(['Level', num2str(Indx_L)]) = Levels{Indx_L};
@@ -115,12 +121,19 @@ for Indx_D = 1:size(Datasets, 1) % loop through participants
             end
             
         end
-
+        
     end
     
 end
 
-fieldnames(AllQuestionnaires)
+% save questionnaires
+Questionnaires = fieldnames(AllQuestionnaires);
+
+for Indx_Q = 1:numel(Questionnaires)
+    Q = AllQuestionnaires.(Questionnaires{Indx_Q}).questions;
+    T = struct2table(Q);
+    writetable(T,  fullfile(CSVFolder, [Questionnaires{Indx_Q} '_All.csv']));
+end
 
 
 
