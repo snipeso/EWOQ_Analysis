@@ -1,5 +1,9 @@
-function T = LoadAllQuestionnaires(DataPath, TemplateFolder, SaveCSV)
+function T = LoadAllQuestionnaires(DataPath, TemplateFolder, SaveCSV, Ignore_Folders)
 
+if ~exist('Ignore_Folders', 'var')
+    Ignore_Folders = {};
+end
+Ignore_Folders = [Ignore_Folders, TemplateFolder, 'CSVs'];
 
 % make path for CSV destinations
 CSVFolder = fullfile(DataPath, 'CSVs');
@@ -35,7 +39,7 @@ Folders = erase(Subfolders, TemplateFolderPath);
 % get all datasets
 Datasets =  ls(DataPath);
 Datasets(contains(string(Datasets), '.'), :) = []; % remove files and dots
-Datasets(contains(string(Datasets), TemplateFolder), :) = []; % ignores template structure
+Datasets(contains(string(Datasets), Ignore_Folders), :) = []; % ignores template structure
 
 AllQuestionnaires = struct();
 
@@ -115,7 +119,9 @@ for Indx_D = 1:size(Datasets, 1) % loop through participants
             
             % save questionnaire as csv inside folder
             if SaveCSV
-                T = struct2table(allAnswers);
+               
+                T = struct2table(allAnswers, 'AsArray', true);
+
                 filename = matlab.lang.makeValidName(Subpath);
                 writetable(T, fullfile(Subpath, [filename, '.csv']));
             end
