@@ -122,8 +122,8 @@ for Indx_D = 1:size(Datasets, 1) % loop through participants
                
                 T = struct2table(allAnswers, 'AsArray', true);
 
-                filename = matlab.lang.makeValidName(Subpath);
-                writetable(T, fullfile(Content(Indx_C).name, [filename, '.csv']));
+                filename = matlab.lang.makeValidName(Content(Indx_C).name);
+                writetable(T, fullfile(Subpath, [filename, '.csv']));
             end
             
         end

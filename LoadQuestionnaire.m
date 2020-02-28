@@ -6,6 +6,8 @@ function [allAnswers, JSON] = LoadQuestionnaire(filepath)
 %%% command window.
 %%% savetable is a boolean that can save the output to a .csv
 
+addpath(fullfile(cd, 'questionExtractors'))
+
 % read JSON
 JSON = jsondecode(fileread(filepath));
 if isfield(JSON, 'answers')
