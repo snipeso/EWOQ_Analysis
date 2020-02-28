@@ -1,3 +1,0 @@
-function SumTable = QuestionSummary(T)
-
-

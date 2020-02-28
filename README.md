@@ -17,4 +17,13 @@ Get all questionnaire answers into a table: `T = LoadAllQuestionnaires('C:\Users
 
 Get all files in data folders: `T = CheckData('C:\Users\colas\Desktop\FakeData\', 'PXX', {'other'})`
 
+`LoadQuestionnaire()` loads the questionnaires one at a time, and returns a structure with all the answers.
 
+Get a single questionnaire answer structure: `allAnswers = LoadQuestionnaire(fullfile('C:\Users\colas\Desktop\FakeData\P01\Session1\Questionnaires\Lifestyle\{longfilepathwithtimestamp}', 'private.json'));`
+
+
+ ### How to save data and create a template
+ 1. Create a folder structure template. Every file (or group of files related to the same data) should be alone in each destination folder.The folder path should indicate meaningfully sessions, participant, and possibly datatype. Avoid saving data at intermediate folders; only the last folder in a series should contain data.
+ 2. Copy template for each participant, and put data in each folder. 
+
+ This makes the folder structure the ultimate guarantor of what each file is, and not the filename itself. 

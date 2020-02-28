@@ -55,7 +55,8 @@ for Indx_Q = 1:numel(Question_IDs)
     Time = datetime(Time, 'ConvertFrom','datenum', 'TimeZone', 'UTC'); % convert to legibile format
     Time.TimeZone = 'Europe/Zurich'; % set time zone to Zurich. NOTE: the questionnaire saves the timestamp as UTC
     
-    % Get question data and answers
+    
+    %%% Get question data and answers
     switch Type
         case 'Slider'
             Question = extractSlider(Answers.(ID));
@@ -97,7 +98,8 @@ for Indx_Q = 1:numel(Question_IDs)
             disp([ID, ' ', Type, 'didnt work'])
     end
 
-    % handle subquestions
+    
+    %%% handle subquestions
     subQs = size(Question, 2);
     
     for Indx_sQ = 1:subQs
