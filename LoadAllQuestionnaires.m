@@ -1,4 +1,4 @@
-function T = LoadAllQuestionnaires(DataPath, TemplateFolder, SaveCSV, Ignore_Folders)
+function T = LoadAllQuestionnaires(DataPath, TemplateFolder, SaveCSV, IgnoreFolders)
 % script for searching for all questionnaires saved in data folders, and
 % putting them all in the same table (by questionnaire).
 
@@ -13,20 +13,7 @@ if ~exist(CSVFolder, 'dir')
 end
 
 %%% get all expected subfolders
-Folders = AllFolderPaths(DataPath, TemplateFolder, false);
-
-%%% get all datasets
-Datasets =  ls(DataPath);
-Datasets(contains(string(Datasets), '.'), :) = []; % remove files and dots
-
-% ignore indicated folders
-if ~exist('Ignore_Folders', 'var')
-    Ignore_Folders = {};
-end
-
-Ignore_Folders = [Ignore_Folders, TemplateFolder, OtherIgnoreFolders];
-Datasets(contains(string(Datasets), Ignore_Folders), :) = []; % ignores template structure
-
+[Folders, Datasets] = AllFolderPaths(DataPath, TemplateFolder, false, [IgnoreFolders, OtherIgnoreFolders]);
 
 %%% gather all questionnaires
 AllQuestionnaires = struct();
@@ -34,7 +21,7 @@ AllQuestionnaires = struct();
 for Indx_D = 1:size(Datasets, 1) % loop through participants
     
     % make valid paths and field names
-    Dataset = deblank(Datasets(Indx_D, :));
+    Dataset = deblank(Datasets(Indx_D, :)); %TODO, see if still needed
     DatasetPath = fullfile(DataPath, Dataset);
     Dataset = matlab.lang.makeValidName(Dataset);
     
@@ -42,7 +29,7 @@ for Indx_D = 1:size(Datasets, 1) % loop through participants
         
         Path = fullfile(DatasetPath, Folders{Indx_F});
         
-                % skip rest if folder not found
+        % skip rest if folder not found
         if ~exist(Path, 'dir')
             warning([deblank(Path), ' does not exist'])
             continue
