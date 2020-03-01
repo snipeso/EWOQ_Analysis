@@ -12,7 +12,26 @@ end
 
 
 %%% get all expected subfolders
-Folders = AllFolderPaths(DataPath, TemplateFolder, false);
+
+TemplateFolderPath = fullfile(DataPath, TemplateFolder);
+Subfolders = dir(fullfile(TemplateFolderPath, '**/*.*')); % don't know if all the stars are necessary
+Subfolders = unique({Subfolders.folder}');
+
+% get only terminating paths
+Metafolders = [];
+for Indx_S = 1:numel(Subfolders)
+    Path = Subfolders{Indx_S};
+    
+    % skip if the path is not a terminating path
+    if nnz(cell2mat(strfind(Subfolders, Path))) > 1
+        Metafolders(end + 1) = Indx_S;
+    end
+end
+Subfolders(Metafolders) = [];
+
+% get abstract folder structure within each dataset
+Folders = erase(Subfolders, TemplateFolderPath);
+
 
 
 %%% search each dataset
