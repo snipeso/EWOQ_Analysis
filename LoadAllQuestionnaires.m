@@ -57,10 +57,14 @@ for Indx_D = 1:size(Datasets, 1) % loop through participants
             end
             
             % Get questionnaire name
-            QName = Levels{end};
+            QName = genvarname(Levels{1});
             
             % download questionnaire
             allAnswers = LoadQuestionnaire(fullfile(Subpath, 'private.json'));
+            
+            if isempty(fieldnames(allAnswers))
+                continue
+            end
             
             % load all questions to questionnaire structure
             for Indx_A = 1:size(allAnswers, 2)
@@ -81,7 +85,11 @@ for Indx_D = 1:size(Datasets, 1) % loop through participants
                 end
                 
                 % save question properties
+                try
                 AllQuestionnaires.(QName).questions(Q_Indx).qID = allAnswers(Indx_A).qID;
+                catch
+                    a=1
+                end
                 AllQuestionnaires.(QName).questions(Q_Indx).Question = allAnswers(Indx_A).Question;
                 AllQuestionnaires.(QName).questions(Q_Indx).qType = allAnswers(Indx_A).Type;
                 AllQuestionnaires.(QName).questions(Q_Indx).qLabels = allAnswers(Indx_A).Labels;

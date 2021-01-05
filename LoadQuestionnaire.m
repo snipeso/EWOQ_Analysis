@@ -96,6 +96,7 @@ for Indx_Q = 1:numel(Question_IDs)
             % Question = extractGroupQs(Answers.(ID));
         otherwise
             disp([ID, ' ', Type, 'didnt work'])
+            continue
     end
 
     
