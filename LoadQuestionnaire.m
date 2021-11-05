@@ -30,8 +30,8 @@ end
 Question_IDs = fieldnames(Answers);
 
 % create struct
-allAnswers = struct();
-newIndx = 1;
+% allAnswers = struct();
+Indx = 1;
 
 for Indx_Q = 1:numel(Question_IDs)
     
@@ -50,37 +50,40 @@ for Indx_Q = 1:numel(Question_IDs)
         Type = '';
     end
     
-    % get time
-    Time = datenum(Answers.(ID).timestamp,'yyyy-mm-ddTHH:MM:SS'); % convert to absolute number
-    Time = datetime(Time, 'ConvertFrom','datenum', 'TimeZone', 'UTC'); % convert to legibile format
-    Time.TimeZone = 'Europe/Zurich'; % set time zone to Zurich. NOTE: the questionnaire saves the timestamp as UTC
-    
     
     %%% Get question data and answers
     Question = Switchboard(Answers.(ID), Type);
-    if isempty(Question)
+    TotQs = numel(Question);
+    if TotQs == 0
         continue
+    elseif ~exist('AllAnswers', 'var') % create structure with first question
+        AllAnswers = Question;
+        Indx = TotQs+1;
+    else % append new data to structure
+        EndIndx = indx+TotQs-1;
+        AllAnswers(Indx:EndIndx) = Question;
+        Indx = EndIndx+1;
     end
     
     
-    %%% handle subquestions
-    subQs = size(Question, 2);
-    
-    for Indx_sQ = 1:subQs
-        
-        allAnswers(newIndx).qID = ID;
-        allAnswers(newIndx).Time = Time;
-        
-        allAnswers(newIndx).Question = Question(Indx_sQ).Title;
-        allAnswers(newIndx).Type = Question(Indx_sQ).Type;
-        allAnswers(newIndx).Labels = Question(Indx_sQ).Labels;
-        
-        allAnswers(newIndx).strAnswer = Question(Indx_sQ).strAnswer;
-        allAnswers(newIndx).numAnswer = Question(Indx_sQ).numAnswer;
-        allAnswers(newIndx).isOK =  Answers.(ID).isOk;
-        
-        newIndx = newIndx + 1;
-    end
+%     %%% handle subquestions if they don't have info already
+%     subQs = size(Question, 2);
+%     
+%     for Indx_sQ = 1:subQs
+%         
+%         allAnswers(newIndx).qID = ID;
+%         allAnswers(newIndx).Time = Time;
+%         
+%         allAnswers(newIndx).Question = Question(Indx_sQ).Title;
+%         allAnswers(newIndx).Type = Question(Indx_sQ).Type;
+%         allAnswers(newIndx).Labels = Question(Indx_sQ).Labels;
+%         
+%         allAnswers(newIndx).strAnswer = Question(Indx_sQ).strAnswer;
+%         allAnswers(newIndx).numAnswer = Question(Indx_sQ).numAnswer;
+%         allAnswers(newIndx).isOK =  Answers.(ID).isOk;
+%         
+%         newIndx = newIndx + 1;
+%     end
 end
 end
 

@@ -1,14 +1,11 @@
 function newQuestion = extractSlider(oldQuestion)
-% Questions were saved as Q_0: [1x1 struct]. Slider struct is that struct
+% Extracts data from questions using sliders. Primarily provides a number
+% answer, but if a radio question was also added, this is included as a
+% string. 
 
-% initialize empty struct
-newQuestion = struct();
-newQuestion.numAnswer = nan;
-newQuestion.strAnswer = '';
 
-% get question properties
-newQuestion.Title = oldQuestion.title;
-newQuestion.Type = 'Slider';
+% create template with basic information
+newQuestion = InitializeQ(oldQuestion);
 
 % convert labels list to one string
 newQuestion.Labels = strjoin(oldQuestion.questionProps.labels, '//');
@@ -25,5 +22,5 @@ if isfield(oldQuestion.data, 'radioAnswer')
 elseif isfield(oldQuestion.data, 'answer')
     newQuestion.numAnswer = oldQuestion.data.answer;
 else
-    warning(['no answer in ', newQuestion.Title])
+    warning(['no answer in ', newQuestion.Question])
 end
