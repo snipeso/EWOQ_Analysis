@@ -3,7 +3,6 @@ function newQuestion = extractSlider(oldQuestion)
 % answer, but if a radio question was also added, this is included as a
 % string. 
 
-
 % create template with basic information
 newQuestion = InitializeQ(oldQuestion);
 

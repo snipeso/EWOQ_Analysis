@@ -1,14 +1,8 @@
 function newQuestion = extractRank(oldQuestion)
-% Questions were saved as Q_0: [1x1 struct]. Slider struct is that struct
+% extracts answers from question where you have to sort items by preference
 
-% initialize empty struct
-newQuestion = struct();
-newQuestion.numAnswer = nan;
-newQuestion.strAnswer = '';
-
-% get question properties
-newQuestion.Title = oldQuestion.title;
-newQuestion.Type = 'RankList';
+% create template with basic information
+newQuestion = InitializeQ(oldQuestion);
 
 % convert labels list to one string
 Labels = oldQuestion.questionProps.cards;

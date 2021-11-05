@@ -57,33 +57,37 @@ for Indx_Q = 1:numel(Question_IDs)
     if TotQs == 0
         continue
     elseif ~exist('AllAnswers', 'var') % create structure with first question
-        AllAnswers = Question;
+        allAnswers = Question;
         Indx = TotQs+1;
     else % append new data to structure
-        EndIndx = indx+TotQs-1;
-        AllAnswers(Indx:EndIndx) = Question;
+        EndIndx = Indx+TotQs-1;
+        try
+            allAnswers(Indx:EndIndx) = Question;
+        catch
+            a=1
+        end
         Indx = EndIndx+1;
     end
     
     
-%     %%% handle subquestions if they don't have info already
-%     subQs = size(Question, 2);
-%     
-%     for Indx_sQ = 1:subQs
-%         
-%         allAnswers(newIndx).qID = ID;
-%         allAnswers(newIndx).Time = Time;
-%         
-%         allAnswers(newIndx).Question = Question(Indx_sQ).Title;
-%         allAnswers(newIndx).Type = Question(Indx_sQ).Type;
-%         allAnswers(newIndx).Labels = Question(Indx_sQ).Labels;
-%         
-%         allAnswers(newIndx).strAnswer = Question(Indx_sQ).strAnswer;
-%         allAnswers(newIndx).numAnswer = Question(Indx_sQ).numAnswer;
-%         allAnswers(newIndx).isOK =  Answers.(ID).isOk;
-%         
-%         newIndx = newIndx + 1;
-%     end
+    %     %%% handle subquestions if they don't have info already
+    %     subQs = size(Question, 2);
+    %
+    %     for Indx_sQ = 1:subQs
+    %
+    %         allAnswers(newIndx).qID = ID;
+    %         allAnswers(newIndx).Time = Time;
+    %
+    %         allAnswers(newIndx).Question = Question(Indx_sQ).Title;
+    %         allAnswers(newIndx).Type = Question(Indx_sQ).Type;
+    %         allAnswers(newIndx).Labels = Question(Indx_sQ).Labels;
+    %
+    %         allAnswers(newIndx).strAnswer = Question(Indx_sQ).strAnswer;
+    %         allAnswers(newIndx).numAnswer = Question(Indx_sQ).numAnswer;
+    %         allAnswers(newIndx).isOK =  Answers.(ID).isOk;
+    %
+    %         newIndx = newIndx + 1;
+    %     end
 end
 end
 

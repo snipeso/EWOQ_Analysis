@@ -1,16 +1,9 @@
 function newQuestion = extractCoordinates(oldQuestion)
-% Questions were saved as Q_0: [1x1 struct]. Slider struct is that struct
+% extracts information from question that required to click on an image (a
+% map).
 
-% initialize empty struct
-newQuestion = struct();
-newQuestion.numAnswer = nan;
-newQuestion.strAnswer = '';
-
-% get question properties
-newQuestion.Title = oldQuestion.title;
-newQuestion.Type = 'ImageCoordinates';
+% create template with basic information
+newQuestion = InitializeQ(oldQuestion);
 
 Answer = [oldQuestion.data.x, oldQuestion.data.y];
 newQuestion.numAnswer = Answer;
-
-newQuestion.Labels = '';

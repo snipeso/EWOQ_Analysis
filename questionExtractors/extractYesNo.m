@@ -1,14 +1,9 @@
 function newQuestion = extractYesNo(oldQuestion)
-% Questions were saved as Q_0: [1x1 struct]. Slider struct is that struct
+% converts binary choice questions. outputs numAnswer as either no (0) or
+% yes (1).
 
-% initialize empty struct
-newQuestion = struct();
-newQuestion.numAnswer = nan;
-newQuestion.strAnswer = '';
-
-% get question properties
-newQuestion.Title = oldQuestion.title;
-newQuestion.Type = 'YesNo';
+% create template with basic information
+newQuestion = InitializeQ(oldQuestion);
 
 Answer = oldQuestion.data.answer;
 
@@ -21,4 +16,3 @@ switch Answer
 end
 
 newQuestion.strAnswer = Answer;
-newQuestion.Labels = '';

@@ -1,31 +1,26 @@
 function newQuestion = extractInput(oldQuestion)
-% Questions were saved as Q_0: [1x1 struct]. Slider struct is that struct
+% extracts answers from open text fields (or similar). returns either a
+% string or number, based on what the field type was. Could also be radio
+% options.
 
-% initialize empty struct
-newQuestion = struct();
-newQuestion.numAnswer = nan;
-newQuestion.strAnswer = '';
-
-% get question properties
-newQuestion.Title = oldQuestion.title;
-newQuestion.Type = 'TypeInput';
+% create template with basic information
+newQuestion = InitializeQ(oldQuestion);
 
 inputType = oldQuestion.questionProps.inputType;
 Answer = oldQuestion.data.text;
 
 switch inputType
     case 'string'
-        newQuestion.strAnswer = Answer;
-        
-        
+        newQuestion.strAnswer = Answer;  
     case 'number'
         newQuestion.numAnswer = str2double(Answer);
     case 'time'
         newQuestion.strAnswer = Answer;
     otherwise
-        warning(['unexpected case!', inputType])
+        error(['unexpected case!', inputType])
 end
 
+% if radio option was selected instead of inputting text
 if isfield(oldQuestion.data, 'radioAnswer')
     Answer = oldQuestion.data.radioAnswer + 1;
     Labels = oldQuestion.questionProps.extraRadio;

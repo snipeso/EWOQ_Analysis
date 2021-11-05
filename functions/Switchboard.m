@@ -28,14 +28,12 @@ switch Type
         newQuestion = extractRank(oldQuestion);
     case ''
         if isfield( oldQuestion.data, 'answer')
-            newQuestion = struct();
-            newQuestion.numAnswer = nan;
+
+            % create template with basic information
+            oldQuestion.type = 'skipped';
+            newQuestion = InitializeQ(oldQuestion);
+
             newQuestion.strAnswer = 'skipped';
-            
-            % get question properties
-            newQuestion.Title =  oldQuestion.title;
-            newQuestion.Type = Type;
-            newQuestion.Labels = '';
         end
     case 'GroupQuestions'
         newQuestion = extractGroupQs(oldQuestion);

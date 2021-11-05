@@ -1,14 +1,9 @@
 function newQuestion = extractMultipleChoice(oldQuestion)
+% extracts data from questions formatted as multiple choice. Provides
+% string of all chosen options, as well as array of chosen options.
 
-
-% initialize empty struct
-newQuestion = struct();
-newQuestion.numAnswer = nan;
-newQuestion.strAnswer = '';
-
-% get question properties
-newQuestion.Title = oldQuestion.title;
-newQuestion.Type = 'MultipleChoice';
+% create template with basic information
+newQuestion = InitializeQ(oldQuestion);
 
 % get answers
 Answers  = find(oldQuestion.data.answers)';

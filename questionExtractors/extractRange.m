@@ -1,19 +1,14 @@
 function newQuestion = extractRange(oldQuestion)
+% Extracts information from question type that allows selection of range of
+% options.
 
-
-% initialize empty struct
-newQuestion = struct();
-newQuestion.numAnswer = nan;
-newQuestion.strAnswer = '';
-
-% get question properties
-newQuestion.Title = oldQuestion.title;
-newQuestion.Type = 'Range';
+% create template with basic information
+newQuestion = InitializeQ(oldQuestion);
 
 % get answers
 Answers  = find(oldQuestion.data.answers)';
 
- 
+
 % convert options to one string
 Tot_Options = numel(oldQuestion.questionProps.labels);
 Labels = cell([Tot_Options, 1]);
