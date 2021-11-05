@@ -4,8 +4,9 @@ function newQuestion = extractSliderGroup(oldQuestion)
 Slider_tot = size(oldQuestion.questionProps, 1);
 for Indx_S = 1:Slider_tot
     
+    % create question template
     Q = struct();
-    Q.type = 'Slider';
+    Q.type = oldQuestion.type;
     Q.id = [oldQuestion.id, '_sl', num2str(Indx_S)];
     Q.title = oldQuestion.title;
     Q.timestamp = oldQuestion.timestamp;
