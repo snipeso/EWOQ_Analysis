@@ -1,14 +1,21 @@
 function newQuestion = extractSliderGroup(oldQuestion)
 
-% initialize empty struct
-newQuestion = struct();
-
 
 Slider_tot = size(oldQuestion.questionProps, 1);
 for Indx_S = 1:Slider_tot
     
-    newQuestion(Indx_S).numAnswer = nan;
-    newQuestion(Indx_S).strAnswer = '';
+    Q = struct();
+    Q.type = 'Slider';
+    Q.id = [oldQuestion.id, '_sl', num2str(Indx_S)];
+    Q.title = oldQuestion.title;
+    Q.timestamp = oldQuestion.timestamp;
+    
+    if Indx_S == 1
+        newQuestion = InitializeQ(Q);
+    else
+        newQuestion(Indx_S) = InitializeQ(Q); %#ok<AGROW>
+    end
+
     
     % get question properties
     newQuestion(Indx_S).Type = 'SliderGroup';
@@ -40,7 +47,7 @@ for Indx_S = 1:Slider_tot
         end
     end
     
-    newQuestion(Indx_S).Title = [oldQuestion.title, subTitle];
+    newQuestion(Indx_S).Question = [newQuestion(Indx_S).Question, subTitle];
     newQuestion(Indx_S).Labels = Labels;
     newQuestion(Indx_S).numAnswer = oldQuestion.data.answers(Indx_S);
     

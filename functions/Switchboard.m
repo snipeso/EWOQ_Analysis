@@ -38,6 +38,6 @@ switch Type
     case 'GroupQuestions'
         newQuestion = extractGroupQs(oldQuestion);
     otherwise
-        disp([ID, ' ', Type, 'didnt work'])
+        disp([oldQuestion.id, ' ', Type, 'didnt work'])
         newQuestion = [];
 end
