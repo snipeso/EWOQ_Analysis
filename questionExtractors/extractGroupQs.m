@@ -8,7 +8,7 @@ newQuestion = struct();
 Tot_Qs = size(oldQuestion.data.allAnswers, 1);
 
 for Indx_Q = 1:Tot_Qs
-    Q = oldQuestion.data.allAnswers(Indx_Q)
+    Q = oldQuestion.data.allAnswers(Indx_Q);
     
     newQuestion(Indx_Q).Type = 'GroupQuestions';    
     newQuestion(Indx_Q).numAnswer = nan;
@@ -25,6 +25,7 @@ for Indx_Q = 1:Tot_Qs
     
     
 end
+A =1;
 
 
 

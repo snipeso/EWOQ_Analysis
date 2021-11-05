@@ -80,6 +80,8 @@ for Indx_Q = 1:numel(Question_IDs)
             Question = extractRange(Answers.(ID));
         case 'ImageCoordinates'
             Question = extractCoordinates(Answers.(ID));
+        case 'RankList'
+            Question = extractRank(Answers.(ID));
         case ''
             if isfield( Answers.(ID).data, 'answer')
                 Question = struct();
@@ -92,13 +94,13 @@ for Indx_Q = 1:numel(Question_IDs)
                 Question.Labels = '';
             end
             %TODO
-            % case 'GroupQuestions'
-            % Question = extractGroupQs(Answers.(ID));
+%         case 'GroupQuestions'
+%             Question = extractGroupQs(Answers.(ID));
         otherwise
             disp([ID, ' ', Type, 'didnt work'])
             continue
     end
-
+    
     
     %%% handle subquestions
     subQs = size(Question, 2);
