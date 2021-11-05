@@ -85,11 +85,7 @@ for Indx_D = 1:size(Datasets, 1) % loop through participants
                 end
                 
                 % save question properties
-                try
                 AllQuestionnaires.(QName).questions(Q_Indx).qID = allAnswers(Indx_A).qID;
-                catch
-                    a=1
-                end
                 AllQuestionnaires.(QName).questions(Q_Indx).Question = allAnswers(Indx_A).Question;
                 AllQuestionnaires.(QName).questions(Q_Indx).qType = allAnswers(Indx_A).Type;
                 AllQuestionnaires.(QName).questions(Q_Indx).qLabels = allAnswers(Indx_A).Labels;
