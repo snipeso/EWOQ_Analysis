@@ -1,40 +1,36 @@
 function newQuestion = extractInputGroup(oldQuestion)
-% Questions were saved as Q_0: [1x1 struct]. Slider struct is that struct
-
-% initialize empty struct
-newQuestion = struct();
-
+% Extracts answers input gorup questions.
 
 Tot_Qs = size(oldQuestion.questionProps.subQuestions, 1);
 
 for Indx_Q = 1:Tot_Qs
-    newQuestion(Indx_Q).numAnswer = nan;
-    newQuestion(Indx_Q).strAnswer = '';
-    try
-        newQuestion(Indx_Q).Title = [oldQuestion.title, ' ',oldQuestion.questionProps.subQuestions{Indx_Q}.text ];
-    catch
-        a= 1
+    
+    % create question template
+    Q = struct();
+    Q.id = [oldQuestion.id, '_ig', num2str(Indx_Q)];
+    Q.type = oldQuestion.type;
+    Q.title = [oldQuestion.title, '; ', oldQuestion.questionProps.subQuestions{Indx_Q}.text];
+    Q.timestamp = oldQuestion.timestamp;
+    
+    if Indx_Q == 1
+        newQuestion = InitializeQ(Q);
+    else
+        newQuestion(Indx_Q) = InitializeQ(Q); %#ok<AGROW>
     end
-   inputType = oldQuestion.questionProps.subQuestions{Indx_Q}.inputType;
+    
+    % get answers
+    inputType = oldQuestion.questionProps.subQuestions{Indx_Q}.inputType;
     
     Answer = oldQuestion.data.answers{Indx_Q};
     
     switch inputType
         case 'string'
-            newQuestion(Indx_Q).strAnswer = Answer;   
+            newQuestion(Indx_Q).strAnswer = Answer;
         case 'number'
             newQuestion(Indx_Q).numAnswer = str2double(Answer);
         case 'time'
             newQuestion(Indx_Q).strAnswer = Answer;
         otherwise
-            warning(['unexpected case!', inputType])
+            error(['unexpected case!', inputType])
     end
-    
-      newQuestion(Indx_Q).Type = inputType;
-       newQuestion(Indx_Q).Labels = '';
-  
-    
 end
-
-
-

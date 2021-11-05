@@ -1,5 +1,6 @@
 function newQuestion = extractRadioTable(oldQuestion)
-
+% extracts answers that were in a radio table. Mainly just single number answers
+% to multiple possible options.
 
 Tot_Qs = size(oldQuestion.questionProps.subQuestions);
 

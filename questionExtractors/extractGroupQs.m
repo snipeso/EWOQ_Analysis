@@ -9,10 +9,22 @@ Indx = 1;
 for Indx_Q = 1:Tot_Qs
     Q = oldQuestion.data.allAnswers(Indx_Q);
     
-    Q.id = [oldQuestion.id, '_', Q.id];
+    if iscell(Q) % deal with weird conversion from JSON
+        Q = Q{1};
+    end
+    
+    
+    Q.id = [oldQuestion.id, '_gq', Q.id];
     Q.title = [oldQuestion.title, ': ', Q.title];
     
-    Type = Q.type;
+    if isfield(Q, 'type')
+        Type = Q.type;
+    else
+        Q.timestamp = oldQuestion.timestamp;
+        Q.data.answer = []; % hack to trick switchboard that the question was skipped; maybe TODO fix
+        Type = '';
+    end
+    
     
     % get question formatted correctly
     newQ =  Switchboard(Q, Type);
