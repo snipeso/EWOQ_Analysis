@@ -37,6 +37,8 @@ switch Type
         end
     case 'GroupQuestions'
         newQuestion = extractGroupQs(oldQuestion);
+    case 'RepeatGroupQuestions'
+        newQuestion = repeatGroupQuestions(oldQuestion);
     otherwise
         disp([oldQuestion.id, ' ', Type, 'didnt work'])
         newQuestion = [];

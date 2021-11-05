@@ -2,7 +2,13 @@ function newQuestion = extractGroupQs(oldQuestion)
 % dangerous recursive function that, when receiving a group question, goes
 % into it, and saves the questions as if they were individual questions.
 
-Tot_Qs = size(oldQuestion.data.allAnswers, 1);
+if isfield(oldQuestion, 'data')
+    Tot_Qs = size(oldQuestion.data.allAnswers, 1);
+else
+    warning(['no answer for ',oldQuestion.id])
+    newQuestion = [];
+    return
+end
 
 Indx = 1;
 
