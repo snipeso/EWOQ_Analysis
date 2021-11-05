@@ -3,30 +3,29 @@ function newQuestion = extractGroupQs(oldQuestion)
 
 
 % initialize empty struct
-newQuestion = struct();
+% newQuestion = struct();
 
 Tot_Qs = size(oldQuestion.data.allAnswers, 1);
+
+Indx = 1;
 
 for Indx_Q = 1:Tot_Qs
     Q = oldQuestion.data.allAnswers(Indx_Q);
     
-    newQuestion(Indx_Q).Type = 'GroupQuestions';    
-    newQuestion(Indx_Q).numAnswer = nan;
-    newQuestion(Indx_Q).strAnswer = '';
+    Q.id = [oldQuestion.id, '_', Q.id];
+    Q.title = [oldQuestion.title, ': ', Q.title];
     
-    Q.questionProps
+    Type = Q.type;
     
-    if isfield(Q.questionProps, 'labels')
-        newQuestion(Indx_Q).Labels = strjoin(Q.questionProps.labels, '//');
-        Answers = Q.questionProps.labels(Q.data.answers);
-         newQuestion(Indx_Q).strAnswer = strjoin(Answers, '//');
-          newQuestion(Indx_Q).numAnswer = find(Q.data.answers);
+    try
+        newQ =  Switchboard(Q, Type);
+        TotQs = numel(newQ); % takes into account that there can be sub-questions
+        EndIndx = Indx+TotQs-1;
+        newQuestion(Indx:EndIndx) =newQ;
+    catch
+        a=1;
     end
     
+    Indx = EndIndx + 1;
     
 end
-A =1;
-
-
-
-%%% needs to spit out struct with  numAnswer, strAnswer, Title,

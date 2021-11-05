@@ -57,48 +57,9 @@ for Indx_Q = 1:numel(Question_IDs)
     
     
     %%% Get question data and answers
-    switch Type
-        case 'Slider'
-            Question = extractSlider(Answers.(ID));
-        case 'SliderGroup'
-            Question = extractSliderGroup(Answers.(ID));
-        case 'MultipleChoice'
-            Question = extractMultipleChoice(Answers.(ID));
-        case 'Radio'
-            Question = extractRadio(Answers.(ID));
-        case 'RadioTable'
-            Question = extractRadioTable(Answers.(ID));
-        case 'YesNo'
-            Question = extractYesNo(Answers.(ID));
-        case 'YesNoGroup'
-            Question = extractYesNoGroup(Answers.(ID));
-        case 'TypeInput'
-            Question = extractInput(Answers.(ID));
-        case 'TypeInputGroup'
-            Question = extractInputGroup(Answers.(ID));
-        case 'Range'
-            Question = extractRange(Answers.(ID));
-        case 'ImageCoordinates'
-            Question = extractCoordinates(Answers.(ID));
-        case 'RankList'
-            Question = extractRank(Answers.(ID));
-        case ''
-            if isfield( Answers.(ID).data, 'answer')
-                Question = struct();
-                Question.numAnswer = nan;
-                Question.strAnswer = 'skipped';
-                
-                % get question properties
-                Question.Title =  Answers.(ID).title;
-                Question.Type = Type;
-                Question.Labels = '';
-            end
-            %TODO
-%         case 'GroupQuestions'
-%             Question = extractGroupQs(Answers.(ID));
-        otherwise
-            disp([ID, ' ', Type, 'didnt work'])
-            continue
+    Question = Switchboard(Answers.(ID), Type);
+    if isempty(Question)
+        continue
     end
     
     
