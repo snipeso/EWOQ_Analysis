@@ -21,7 +21,12 @@ for Indx_Q = 1:Tot_Qs
     
     
     Q.id = [oldQuestion.id, '_gq', Q.id];
-    Q.title = [oldQuestion.title, ': ', Q.title];
+    if isfield(Q, 'title')
+        
+        Q.title = [oldQuestion.title, ': ', Q.title];
+    else
+        Q.title = [oldQuestion.title, ': ', num2str(Indx_Q)];
+    end
     
     if isfield(Q, 'type')
         Type = Q.type;

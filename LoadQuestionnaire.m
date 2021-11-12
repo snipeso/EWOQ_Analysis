@@ -67,7 +67,6 @@ for Indx_Q = 1:numel(Question_IDs)
     
 end
 
-
-
-
-
+if ~exist('allAnswers', 'var') % if no answers provided, skip
+    allAnswers = struct();
+end

@@ -61,7 +61,7 @@ for Indx_D = 1:size(Datasets, 1) % loop through participants
             
             % download questionnaire
             allAnswers = LoadQuestionnaire(fullfile(Subpath, 'private.json'));
-            
+
             if isempty(fieldnames(allAnswers))
                 continue
             end
